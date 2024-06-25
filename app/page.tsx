@@ -11,36 +11,18 @@ export default async function Home() {
   const session = await auth()
 const allItems = await database.query.items.findMany();
  
-// if (!session) return null;
-// const user = session.user;
-// if(!user) return null;
-
   return (
-    <main className="container mx-auto py-12">
-      {session ? <SignOut /> : <SignIn />}
-
-      {session?.user?.name}
-
-      <form
-        action={async (formData : FormData) => {
-          'use server'
-          await database.insert(items).values({
-            name: formData.get("name") as string,
-            userId: session?.user?.id!,
-          });
-          revalidatePath("/");
-        }}
-      >
-      <Input name="name" placeholder="Name your item" />
-      <Button type="submit">Post Item</Button>
-      </form>
+    <main className="container mx-auto py-12 space-y-5">
+    <h2 className="text-2xl font-bold">Items for Sale</h2>
+    <div className="grid grid-cols-4 gap-8">
     {
       allItems.map((item) => (
-        <div key={item.id}>
+        <div key={item.id} className="border p-8 rounded-xl">
           {item.name}
         </div>
       ))
     }
+    </div>
 
     </main>
   );
